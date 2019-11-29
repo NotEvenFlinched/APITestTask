@@ -9,6 +9,10 @@ import util.HttpRequestor;
 
 import java.lang.reflect.Type;
 import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class Employee {
     @Expose
@@ -32,29 +36,18 @@ public class Employee {
     }
 
     public static boolean checkIfEmployeeNameContains2Digits(String name) {
-        int numberOfDigits = 0;
-        for (int i = 0; i < name.length(); i++) {
-            if (Character.isDigit(name.charAt(i))) {
-                numberOfDigits++;
-            }
-        }
-        return numberOfDigits == 2;
+        return name.matches("^\\D*(\\d)\\D*(\\d)\\D*$");
     }
 
     public static String findEmployeeWithLongestName(Collection<Employee> employees) {
-        int maxLength = 0;
-        String longestString = "";
-        for (Employee employee : employees) {
-            if (employee.employee_name.length() > maxLength) {
-                maxLength = employee.employee_name.length();
-                longestString = employee.employee_name;
-            }
-        }
-        return longestString;
+        Optional<String> longestName = employees.stream().map(employee -> employee.employee_name).max(Comparator.comparingInt(String::length));
+        return longestName.orElse("");
     }
 
     public static void createNewEmployee(String name, int salary, int age) {
-        String nameWithCurrentDate = name + "_" + java.time.LocalTime.now().toString();
+        // we need to replace any " symbol with \" to match proper data format
+        String fixedName = name.replaceAll("\"", "\\\\\"");
+        String nameWithCurrentDate = java.time.LocalTime.now().toString() + fixedName;
         String requestBody = "{\"name\": \"" + nameWithCurrentDate + "\", \"salary\": \"" + salary + "\", \"age\": \"" + age + "\"}";
         System.out.println(HttpRequestor.post(Constants.createNewEmployee, requestBody));
     }

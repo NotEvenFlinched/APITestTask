@@ -13,10 +13,8 @@ public class PrintOutAllEmployeesIdsAndNamesTest {
     @Test
     public void printOutAllEmployeesIdsAndNames() {
         Collection<Employee> employees = Employee.getAllEmployeesCollection();
-
-        for (Employee employee : employees) {
-            if (Employee.checkIfEmployeeNameContains2Digits(employee.employee_name))
-                System.out.println("id=<" + employee.id + ">,name=<" + employee.employee_name + ">");
-        }
+        employees.stream()
+                .filter(e -> Employee.checkIfEmployeeNameContains2Digits(e.employee_name))
+                .forEach(e -> System.out.println("id=<" + e.id + ">,name=<" + e.employee_name + ">"));
     }
 }
