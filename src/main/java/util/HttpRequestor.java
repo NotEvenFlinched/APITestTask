@@ -1,5 +1,7 @@
 package util;
 
+import org.springframework.stereotype.Component;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -7,6 +9,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+@Component
 public class HttpRequestor {
     /**
      * this method indicates to do a Get request
@@ -14,7 +17,7 @@ public class HttpRequestor {
      * @param route - url
      * @return response - JSON content type
      */
-    public static String get(String route) {
+    public String get(String route) {
         try {
             String response = "";
             URL url = new URL(route);
@@ -50,7 +53,7 @@ public class HttpRequestor {
      * @param requestBody - JSON content type
      * @return response - JSON content type
      */
-    public static String post(String route, String requestBody) {
+    public String post(String route, String requestBody) {
         try {
             String response = "";
             URL url = new URL(route);
